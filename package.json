@@ -1,0 +1,30 @@
+{
+  "name": "dextromethorphan",
+  "version": "0.0.1",
+  "description": "microblogging with leveldb",
+  "main": "index.js",
+  "dependencies": {
+    "level": "~0.18.0",
+    "level-sublevel": "~5.2.0",
+    "leveldown": "~0.10.2",
+    "level-paginate": "*",
+    "concat-stream": "~1.4.4"
+  },
+  "devDependencies": {
+    "mocha": "~1.18.2",
+    "should": "~3.3.0"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ednapiranha/node-dextromethorphan.git"
+  },
+  "keywords": [
+    "microblog",
+    "leveldb"
+  ],
+  "author": "Edna Piranha <jen@ednapiranha.com> (http://ednapiranha.com)",
+  "license": "BSD"
+}
