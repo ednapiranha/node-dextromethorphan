@@ -24,11 +24,13 @@ Microblogging with leveldb.
         message: 'some message'
       },
       meta: {
-        location: '37.3882807, -122.0828559'
+        location: '37.3882807, -122.0828559',
+        author: 'jen',
+        postType: 'youtube'
       }
     };
 
-    d.create('jen', message, function (err, msg) {
+    d.create(message, function (err, msg) {
       if (!err) {
         console.log(msg);
       }

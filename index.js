@@ -29,42 +29,51 @@ var Dextromethorphan = function (options) {
     }
   };
 
-  this.create = function (user, message, callback) {
+  this.create = function (message, callback) {
     if (!message.content.message) {
       callback(new Error('Message invalid'));
-    } else {
-      message.id = setTime();
-      message.content.created = message.content.updated = message.id;
-      this.update(user, message, callback);
+      return;
     }
+
+    message.id = setTime();
+    message.meta.created = message.meta.updated = message.id;
+    this.update(message, callback);
   };
 
   this.get = function (id, callback) {
     self.centralLevel.get(KEY + id, function (err, message) {
       if (err || !message) {
         callback(new Error('Not found ', err));
-      } else {
-        callback(null, message);
+        return;
       }
+
+      callback(null, message);
     });
   };
 
-  this.update = function (user, message, callback) {
-    checkUser(user);
-    message.content.updated = setTime();
+  this.update = function (message, callback) {
+    if (!message.meta.author) {
+      callback(new Error('Author is invalid'));
+      return;
+    }
+
+    checkUser(message.meta.author);
+    message.meta.updated = setTime();
 
     this.centralLevel.put(KEY + message.id, message, function (err) {
       if (err) {
         callback(err);
-      } else {
-        users[user].put(KEY + message.id, message, function (err) {
-          if (err) {
-            callback(err);
-          } else {
-            callback(null, message);
-          }
-        });
+        return;
       }
+
+      users[message.meta.author].put(KEY + message.id, message, function (err) {
+        if (err) {
+          callback(err);
+          return;
+        }
+
+        callback(null, message);
+      });
     });
   };
 

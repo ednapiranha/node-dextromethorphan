@@ -18,7 +18,9 @@ var message = {
     message: 'some message'
   },
   meta: {
-    location: '37.3882807, -122.0828559'
+    location: '37.3882807, -122.0828559',
+    postType: false,
+    author: author
   }
 };
 
@@ -31,7 +33,7 @@ describe('dextromethorphan', function () {
     it('creates an invalid message', function (done) {
       message.content.message = '';
 
-      d.create(author, message, function (err, m) {
+      d.create(message, function (err, m) {
         should.exist(err);
         done();
       });
@@ -40,7 +42,7 @@ describe('dextromethorphan', function () {
     it('creates a valid message', function (done) {
       message.content.message = 'test';
 
-      d.create(author, message, function (err, m) {
+      d.create(message, function (err, m) {
         should.exist(m);
         id = m.id;
         m.content.should.equal(message.content);
@@ -72,9 +74,24 @@ describe('dextromethorphan', function () {
         m.content.message = 'new message';
 
         setTimeout(function () {
-          d.update(author, m, function (err, mt) {
+          d.update(m, function (err, mt) {
             mt.content.message.should.equal(m.content.message);
-            mt.content.updated.should.not.equal(mt.content.created);
+            mt.meta.updated.should.not.equal(mt.meta.created);
+            done();
+          });
+        }, 1500);
+      });
+    });
+
+    it('does not update a message', function (done) {
+      d.get(id, function (err, m) {
+        m.content.message = 'new message';
+        m.meta.author = '';
+
+        setTimeout(function () {
+          d.update(m, function (err, mt) {
+            should.exist(err);
+            message.meta.author = author;
             done();
           });
         }, 1500);

@@ -1,6 +1,6 @@
 {
   "name": "dextromethorphan",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "microblogging with leveldb",
   "main": "index.js",
   "dependencies": {
